@@ -3,7 +3,37 @@ guid: c6cd392f38222f74895483e35ac18ad6
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.007
+    second: {fileID: 2100000, guid: 64e5dc252530ad440b6bdca86259f390, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.008
+    second: {fileID: 2100000, guid: 6a15031f873cd5a4885ee4bd8aee3798, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.009
+    second: {fileID: 2100000, guid: 6d4b42ebfbf3d1141bb75c26a32cf2e6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.010
+    second: {fileID: 2100000, guid: 569d82ae6e972ee4f9e39cd0c371ddf9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.011
+    second: {fileID: 2100000, guid: 0dd7567e127a6dc4a8f8c1121f858e84, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.012
+    second: {fileID: 2100000, guid: f259046f041fed3419cd17425240da9e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -41,8 +71,8 @@ ModelImporter:
     sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0

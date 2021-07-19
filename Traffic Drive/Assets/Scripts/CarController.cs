@@ -8,7 +8,6 @@ public class CarController : MonoBehaviour
     private float y_input;
     private bool isBreaking;
 
-    [Header("Mass")]
     [SerializeField] private Vector3 centerOfMass;
     private Rigidbody rigidbody;
 
@@ -46,16 +45,14 @@ public class CarController : MonoBehaviour
     }
 
     private void FixedUpdate(){
-        Debug.Log("");
-        x_input = Input.GetAxis("Horizontal");
-        y_input = Input.GetAxis("Vertical");
+            x_input = Input.GetAxis("Horizontal");
+            y_input = Input.GetAxis("Vertical");
 
-        isBreaking = Input.GetButton("Jump");
-        if(Input.GetButtonDown("Submit")){
-            transform.position = startPos;
-            transform.rotation = startRot;
-        }
-
+            isBreaking = Input.GetButton("Jump");
+            if(Input.GetButtonDown("Submit")){
+                transform.position = startPos;
+                transform.rotation = startRot;
+            }
         Debug.Log(isBreaking);
 
         HandleMotor();
@@ -72,6 +69,7 @@ public class CarController : MonoBehaviour
             BanBelakangKiri.brakeTorque = 0;
         }        
     }
+    
 
     private void HandleMotor(){
         if((rigidbody.velocity.sqrMagnitude < topSpeed && BanDepanKanan.rpm > 0) || (rigidbody.velocity.sqrMagnitude < topReverseSpeed && BanDepanKanan.rpm < 0)){
@@ -123,8 +121,16 @@ public class CarController : MonoBehaviour
 
     private void Steering(){
         float _currentAngle = x_input * maxSteeringAngle;
-        BanDepanKanan.steerAngle = _currentAngle;
-        BanDepanKiri.steerAngle = _currentAngle;
+        if (x_input > 0 ) {
+            BanDepanKanan.steerAngle = Mathf.Rad2Deg * Mathf.Atan(2.55f / (maxSteeringAngle + (1.5f / 2))) * x_input;
+            BanDepanKiri.steerAngle = Mathf.Rad2Deg * Mathf.Atan(2.55f / (maxSteeringAngle - (1.5f / 2))) * x_input;
+        } else if (x_input < 0 ) {                                                          
+            BanDepanKanan.steerAngle = Mathf.Rad2Deg * Mathf.Atan(2.55f / (maxSteeringAngle - (1.5f / 2))) * x_input;
+            BanDepanKiri.steerAngle = Mathf.Rad2Deg * Mathf.Atan(2.55f / (maxSteeringAngle + (1.5f / 2))) * x_input;
+        } else {
+            BanDepanKanan.steerAngle =0;
+            BanDepanKiri.steerAngle =0;
+        }
     }
 
     private void changeWheelRotation(WheelCollider wheelCollider, Transform wheelTransform){
