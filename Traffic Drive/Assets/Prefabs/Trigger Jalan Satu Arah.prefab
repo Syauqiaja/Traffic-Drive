@@ -105,8 +105,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8782479789946647863}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 024abcb58220f4f4b898595a147cabfd, type: 3}
+  m_Script: {fileID: 11500000, guid: daf8f150bc07e4d4bba1d276d635af25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stayMaxTime: 5
-  refreshRate: 10
+  refreshRate: 0.5

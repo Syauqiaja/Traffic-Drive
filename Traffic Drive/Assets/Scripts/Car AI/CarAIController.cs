@@ -8,6 +8,10 @@ public class CarAIController : MonoBehaviour
     private float y_input;
     [SerializeField] private Vector3 centerOfMass;
     private Rigidbody rigidbody;
+    [Header("AI Settings")]
+    [SerializeField] private Vector3 rayOffset = new Vector3(0, 0, 2f);
+    [SerializeField] private float obstacleDistance = 4f;
+    [SerializeField] private LayerMask obstacleLayerMask;
 
     [Header("Motor Settings")]
     [SerializeField] private float breakForce = 600f;
@@ -30,6 +34,7 @@ public class CarAIController : MonoBehaviour
 
     public Waypoint currentWaypoint;
     public Vector3 waypointPos;
+    private bool isBraking = false;
 
     private void Start() {
         rigidbody = GetComponent<Rigidbody>();
@@ -42,8 +47,11 @@ public class CarAIController : MonoBehaviour
             Vector3 destination = transform.InverseTransformPoint(waypointPos);
             destination /= destination.magnitude;
             x_input = (destination).x * 2f / (destination).magnitude; 
+
+            if(currentWaypoint == null) Destroy(gameObject);
             
             CheckDestination();
+            CheckObstacle();
 
         HandleMotor();
         Steering();
@@ -51,11 +59,28 @@ public class CarAIController : MonoBehaviour
         BrakeHandler();
     }
 
+    void CheckObstacle(){
+        RaycastHit hit;
+        Debug.DrawRay(transform.TransformPoint(rayOffset), transform.forward * obstacleDistance, Color.white);
+        if(Physics.Raycast(transform.TransformPoint(rayOffset), transform.forward,out hit,obstacleDistance, obstacleLayerMask)){
+            Debug.DrawRay(transform.TransformPoint(rayOffset), transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            Debug.Log("Brake Torque"+BanBelakangKanan.brakeTorque);
+            isBraking = true;
+            if(hit.distance < 1f){
+                rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, Vector3.zero, Time.deltaTime * 5f);
+            }
+        }else{
+            isBraking = false;
+        }
+    }
+
     void BrakeHandler(){
-        if(currentWaypoint.LampuMerah != null && !currentWaypoint.LampuMerah.isHijau){
+         if(isBraking) {
+            BanBelakangKanan.brakeTorque = breakForce * 10f;
+            BanBelakangKiri.brakeTorque = breakForce * 10f;
+        }else if(currentWaypoint.LampuMerah != null && !currentWaypoint.LampuMerah.isHijau){
             BanBelakangKanan.brakeTorque = breakForce * 5f;
             BanBelakangKiri.brakeTorque = breakForce * 5f;
-            Debug.Log("Braking Lampu Merah "+Time.time);
         }else if(x_input > 0.7f && rigidbody.velocity.sqrMagnitude > topSpeed /2f){
             BanBelakangKanan.brakeTorque = breakForce;
             BanBelakangKiri.brakeTorque = breakForce;
@@ -137,5 +162,13 @@ public class CarAIController : MonoBehaviour
 
         wheelTransform.rotation = quat;
         wheelTransform.position = pos;
+    }
+    private void OnCollisionEnter(Collision other) {
+        if(other.gameObject.CompareTag("NPC")){
+            if(other.transform.position.y < transform.position.y - 0.2f) Destroy(gameObject);
+            if(Vector3.Dot(transform.forward, transform.InverseTransformDirection(other.transform.position)) > 0){
+                rigidbody.velocity *= 0f;
+            }
+        }
     }
 }
