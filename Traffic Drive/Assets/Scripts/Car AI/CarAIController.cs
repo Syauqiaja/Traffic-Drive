@@ -64,7 +64,7 @@ public class CarAIController : MonoBehaviour
         Debug.DrawRay(transform.TransformPoint(rayOffset), transform.forward * obstacleDistance, Color.white);
         if(Physics.Raycast(transform.TransformPoint(rayOffset), transform.forward,out hit,obstacleDistance, obstacleLayerMask)){
             Debug.DrawRay(transform.TransformPoint(rayOffset), transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log("Brake Torque"+BanBelakangKanan.brakeTorque);
+            // Debug.Log("Brake Torque"+BanBelakangKanan.brakeTorque);
             isBraking = true;
             if(hit.distance < 1f){
                 rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, Vector3.zero, Time.deltaTime * 5f);

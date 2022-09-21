@@ -17,7 +17,8 @@ public class RambuCollider : MonoBehaviour
     }
 
     public void Penalty(){
+        PlayerManager.Instance.timeLeft -= 10f;
         VisualManager.Instance.Danger();
-        VisualManager.Instance.CameraShake(0.02f, 0.2f);
+        VisualManager.Instance.CameraShake(0.05f, 0.2f);
     }
 }

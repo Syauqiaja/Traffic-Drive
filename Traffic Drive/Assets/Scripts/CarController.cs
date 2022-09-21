@@ -14,11 +14,13 @@ public class CarController : MonoBehaviour
     [Header("Motor Settings")]
     [SerializeField] private float breakForce = 600f;
     [SerializeField] private float motorForce = 500f;
-    [SerializeField] [Range(0, 90)] private float maxSteeringAngle = 45f;
+    [SerializeField] [Range(4f, 10f)] private float maxSteeringAngle = 4f;
     [SerializeField] [Range(0f, 1f)] private float driftValue = 0.5f;
     [SerializeField] private float brakeStiffness = 0.25f;
     [SerializeField] private float topSpeed = 150f;
     [SerializeField] private float topReverseSpeed = 25f;
+    [SerializeField] private List<AudioClip> EnggineSounds = new List<AudioClip>();
+    public float currspeed = 0f;
 
     [Header("Wheel Colliders")]
     [SerializeField] private WheelCollider BanDepanKiri;
@@ -35,16 +37,21 @@ public class CarController : MonoBehaviour
     private float currentFrictionStiffness;
 
     private Vector3 startPos;
+    private AudioSource audioSource;
     private Quaternion startRot;
+    private void Awake() {
+        audioSource = GetComponent<AudioSource>();
+        rigidbody = GetComponent<Rigidbody>();
+    }
     private void Start() {
         startPos = transform.position;
         startRot = transform.rotation;
-        rigidbody = GetComponent<Rigidbody>();
         rigidbody.centerOfMass = centerOfMass;
         currentFrictionStiffness = BanBelakangKanan.sidewaysFriction.stiffness;
     }
 
     private void FixedUpdate(){
+        if(PlayerManager.Instance.allowInput){
             x_input = Input.GetAxis("Horizontal");
             y_input = Input.GetAxis("Vertical");
 
@@ -53,12 +60,18 @@ public class CarController : MonoBehaviour
                 transform.position = startPos;
                 transform.rotation = startRot;
             }
-        Debug.Log(isBreaking);
+        // Debug.Log(isBreaking);
 
         HandleMotor();
         Steering();
         UpdateWheel();
-
+        UpdateSound();
+        }else{
+            BanBelakangKanan.brakeTorque = 6000f;
+            BanBelakangKiri.brakeTorque = 6000f;
+            BanDepanKanan.brakeTorque = 6000f;
+            BanDepanKiri.brakeTorque = 6000f;
+        }
     }
 
     private void Update() {
@@ -67,7 +80,29 @@ public class CarController : MonoBehaviour
             BanDepanKiri.brakeTorque = 0;
             BanBelakangKanan.brakeTorque = 0;
             BanBelakangKiri.brakeTorque = 0;
-        }        
+        }
+        if(Input.GetKeyDown(KeyCode.H)){
+            SoundSystem.PlaySounds(SoundSystem.Tracks.Klakson);
+        }
+    }
+
+    int currentGigi = -1;
+    float pitchTarget = 0f;
+    float motorSpeedNormalized = 0f;
+    void UpdateSound(){
+        motorSpeedNormalized = rigidbody.velocity.sqrMagnitude / topSpeed;
+        if(motorSpeedNormalized < 0.25f){
+            pitchTarget = Mathf.Lerp(0.08f, 1.2f,motorSpeedNormalized);
+        }else if(motorSpeedNormalized < 0.5f){
+            pitchTarget = Mathf.Lerp(0.08f, 1.2f,motorSpeedNormalized - 0.2f);
+        }else if(motorSpeedNormalized < .75f){
+            pitchTarget = Mathf.Lerp(0.08f, 1.2f,motorSpeedNormalized - 0.4f);
+        }else if(motorSpeedNormalized <= 1f){
+            pitchTarget = Mathf.Lerp(0.08f, 1.2f,motorSpeedNormalized - 0.6f);
+        }
+        // Debug.Log(motorSpeedNormalized);
+        // audioSource.volume = Mathf.Clamp(audioSource.volume + 0.08f, 0.1f, 1f);
+        audioSource.pitch = Mathf.Lerp(audioSource.pitch, pitchTarget, Time.deltaTime * 4f);
     }
     
 
@@ -77,14 +112,14 @@ public class CarController : MonoBehaviour
                 BanBelakangKanan.brakeTorque = breakForce/2f;
                 BanBelakangKiri.brakeTorque = breakForce/2f;
             }else{
-                BanDepanKanan.motorTorque = y_input * motorForce;
-                BanDepanKiri.motorTorque =  y_input * motorForce;
+                BanBelakangKanan.motorTorque = y_input * motorForce;
+                BanBelakangKiri.motorTorque =  y_input * motorForce;
                 BanBelakangKanan.brakeTorque = 0f;
                 BanBelakangKiri.brakeTorque = 0f;
             }
         }else{
-            BanDepanKanan.motorTorque = 0;
-            BanDepanKiri.motorTorque =  0;
+            BanBelakangKanan.motorTorque = 0;
+            BanBelakangKiri.motorTorque =  0;
         }
 
         float _currentBreak = isBreaking ? breakForce : 0f;
@@ -104,6 +139,7 @@ public class CarController : MonoBehaviour
             frictionCurve.stiffness = brakeStiffness;
             BanBelakangKanan.sidewaysFriction = frictionCurve;
             BanBelakangKiri.sidewaysFriction = frictionCurve;
+            SoundSystem.PlaySounds(SoundSystem.Tracks.Belok);
     }
     private void ControlDrift(){
         WheelFrictionCurve frictionCurve = BanBelakangKanan.sidewaysFriction;
@@ -131,6 +167,7 @@ public class CarController : MonoBehaviour
             BanDepanKanan.steerAngle =0;
             BanDepanKiri.steerAngle =0;
         }
+            currspeed = BanDepanKanan.steerAngle;
     }
 
     private void changeWheelRotation(WheelCollider wheelCollider, Transform wheelTransform){
@@ -140,5 +177,15 @@ public class CarController : MonoBehaviour
 
         wheelTransform.rotation = quat;
         wheelTransform.position = pos;
+    }
+    private void OnCollisionEnter(Collision other) {
+        if(!other.gameObject.CompareTag("Player") || !other.gameObject.CompareTag("Floor")){
+            if(motorSpeedNormalized > .5f)
+                SoundSystem.PlaySounds(SoundSystem.Tracks.TabrakBerat, 0.5f);
+            else if(motorSpeedNormalized > .25f)
+                SoundSystem.PlaySounds(SoundSystem.Tracks.TabrakSedang, 0.3f);
+            else
+                SoundSystem.PlaySounds(SoundSystem.Tracks.TabrakRingan);
+        }
     }
 }

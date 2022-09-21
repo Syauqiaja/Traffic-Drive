@@ -5,16 +5,17 @@ TagManager:
   serializedVersion: 2
   tags:
   - NPC
+  - Floor
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - AI Agent
+  - 
   - Water
   - UI
   - 
   - 
-  - 
+  - Tiang Lampu
   - 
   - 
   - 

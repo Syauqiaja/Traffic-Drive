@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 2050
   stringTagMap:
     RenderType: Opaque
   disabledShaderPasses: []
@@ -109,9 +109,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 0.84751457, b: 0, a: 1}
     - _Color: {r: 1, g: 0.8044265, b: 0, a: 1}
-    - _EmissionColor: {r: 1.0592737, g: 1.0259981, b: 0.31611833, a: 1}
+    - _EmissionColor: {r: 2.8838866, g: 2.7729678, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-  m_BuildTextureStacks: []
 --- !u!114 &4021444616054569691
 MonoBehaviour:
   m_ObjectHideFlags: 11
