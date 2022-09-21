@@ -3,7 +3,22 @@ guid: aa55f1d9060a75642b34a6b7feb3dc31
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.010
+    second: {fileID: 2100000, guid: 2339e682320138a49b46870838463c02, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahazn.009
+    second: {fileID: 2100000, guid: c9c4e809cd8e44b49b0df6e7338e757e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Kanopi
+    second: {fileID: 2100000, guid: 46d7e996491f5a6459d868743c63f1c6, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -3,7 +3,32 @@ guid: e69ac73de399b364e8201eaff02ba47d
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan
+    second: {fileID: 2100000, guid: 2362dd1747faac5499fa50580ab5a821, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.001
+    second: {fileID: 2100000, guid: 31354be411d2e0a40ab8a7f54fbd3fec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.007
+    second: {fileID: 2100000, guid: 6897608a4a2f186479768c066b68874d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.016
+    second: {fileID: 2100000, guid: 03028903f789fc24cab9f144caa1aa56, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bahan.018
+    second: {fileID: 2100000, guid: fe9d8ecf0cbc4d84187f12c9b918630b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
